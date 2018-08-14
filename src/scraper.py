@@ -1,20 +1,15 @@
 import sys
 import newspaper
-import configparser
 from time import sleep
 
-def parse_settings(settings_filename):
-  config = configparser.ConfigParser()
-  config.read(settings_filename)
-  scraper_settings = config['SCRAPER']
-
-  wait_time = scraper_settings['WaitTime']
-  sources = [item.strip() for item in scraper_settings['Sources'].split(',')]
+def parse_settings(settings):
+  wait_time = settings['WaitTime']
+  sources = [item.strip() for item in settings['Sources'].split(',')]
 
   return wait_time, sources
 
-def run(settings_filename, queue):
-  wait_time, source_urls = parse_settings(settings_filename)
+def run(settings, queue):
+  wait_time, source_urls = parse_settings(settings)
 
   while True:
     for url in source_urls:

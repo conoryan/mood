@@ -4,11 +4,12 @@ create class to store new data - inherit from it for tweet vs news site etc
 - analyzer
 use worker pool to chew queue
 process data based on class type of data taken off queue - ie tweet vs site
+extract date and url from article and put in db
 
 - general
-allow access to each module's necessary configs (do parsing of each section and pass in the result to the run function)
 logging
+make real math model
 
-dependencies:
+- dependencies:
 TextBlob
 newspaper3k
