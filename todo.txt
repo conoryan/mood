@@ -1,5 +1,6 @@
 - scraper 
 create class to store new data - inherit from it for tweet vs news site etc
+catch newspaper.article.ArticleException
 
 - analyzer
 use worker pool to chew queue

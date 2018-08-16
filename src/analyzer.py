@@ -5,28 +5,25 @@ def parse_settings(settings):
 
   return db_location
 
-def analyze_sentence(c, sentence, url):
-  print(sentence)
-  print(sentence.noun_phrases)
-  print(sentence.polarity)
-
+def analyze_sentence(c, sentence, datetime, url):
   for phrase in sentence.noun_phrases:
-    c.execute("INSERT INTO mydb (datetime, phrase, sentiment, url) VALUES ('{date}', '{phr}', {pol}, '{lnk}')" \
-              .format(date='s', phr=phrase, pol=str(sentence.polarity), lnk=url))
+    c.execute("INSERT INTO phrases (datetime, phrase, sentiment, url) VALUES (?, ?, ?, ?)" \
+              , (str(datetime), phrase, str(sentence.polarity), url))
 
 def analyze(c, article):
   from textblob import TextBlob # this is a hack
   blob = TextBlob(article.text)
+
   for sentence in blob.sentences:
-    analyze_sentence(c, sentence, article.url)
+    analyze_sentence(c, sentence, article.publish_date, article.url)
 
 def init_db(db_location):
   conn = sqlite3.connect(db_location)
   c = conn.cursor()
 
-  c.execute("SELECT * FROM sqlite_master WHERE name = 'mydb'") # exists
+  c.execute("SELECT * FROM sqlite_master WHERE name = 'phrases'") # exists
   if (len(c.fetchall()) == 0):
-    c.execute('CREATE TABLE mydb (datetime TEXT, phrase TEXT, '
+    c.execute('CREATE TABLE phrases (id INTEGER PRIMARY KEY, datetime TEXT, phrase TEXT, '
               'sentiment REAL, url TEXT)')
   conn.commit()
 
