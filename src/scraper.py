@@ -13,7 +13,7 @@ def run(settings, queue):
 
   while True:
     for url in source_urls:
-      source = newspaper.build(url)
+      source = newspaper.build(url, memoize_articles=False)
       if (source.size() > 0):
         print('Scraper found ' + str(source.size()) + ' new articles for ' +source.url)
         for article in source.articles:

@@ -1,45 +1,36 @@
 import sqlite3
 
 def parse_settings(settings):
-  db_location = settings['DataBase']
+  return None # not used yet
 
-  return db_location
-
-def analyze_sentence(c, sentence, datetime, url):
+def analyze_sentence(db, sentence, datetime, url):
   for phrase in sentence.noun_phrases:
-    c.execute("INSERT INTO phrases (datetime, phrase, sentiment, url) VALUES (?, ?, ?, ?)" \
-              , (str(datetime), phrase, str(sentence.polarity), url))
+    if (not db.insert_phrase(datetime, phrase, sentence.polarity, url)):
+      return False
 
-def analyze(c, article):
+  return True
+
+def analyze(db, article):
   from textblob import TextBlob # this is a hack
   blob = TextBlob(article.text)
 
   for sentence in blob.sentences:
-    analyze_sentence(c, sentence, article.publish_date, article.url)
+    if (not analyze_sentence(db, sentence, article.publish_date, article.url)):
+      return False
+  return True
 
-def init_db(db_location):
-  conn = sqlite3.connect(db_location)
-  c = conn.cursor()
-
-  c.execute("SELECT * FROM sqlite_master WHERE name = 'phrases'") # exists
-  if (len(c.fetchall()) == 0):
-    c.execute('CREATE TABLE phrases (id INTEGER PRIMARY KEY, datetime TEXT, phrase TEXT, '
-              'sentiment REAL, url TEXT)')
-  conn.commit()
-
-  return c, conn
-
-def run(settings, queue):
-  db_location = parse_settings(settings)
-  c, conn = init_db(db_location)
+def run(settings, queue, phrases_db):
+  running = True
 
   try:
-    while True:
+    while running:
       item = queue.get()
       item.download()
       item.parse()
 
-      analyze(c, item)
-      conn.commit()
+      if (not analyze(phrases_db, item)):
+        print('Unable to analyze article; exiting')
+        running = False
+
   finally:
-    conn.close()
+    None
