@@ -1,27 +1,31 @@
 import sqlite3
+import newspaper
 
 def parse_settings(settings):
-  return None # not used yet
+  pass # not used yet
 
-def analyze_sentence(db, sentence, datetime, url):
+def analyze_news_sentence(news_db, sentence, datetime, url):
   for phrase in sentence.noun_phrases:
-    db.insert_phrase(datetime, phrase, sentence.polarity, url)
+    news_db.insert_phrase(datetime, phrase, sentence.polarity, url)
 
-def analyze(db, article):
+def analyze_article(news_db, article):
+  article.download()
+  article.parse()
+
   from textblob import TextBlob # this is a hack
   blob = TextBlob(article.text)
-
   for sentence in blob.sentences:
-    analyze_sentence(db, sentence, article.publish_date, article.url)
+    analyze_news_sentence(news_db, sentence, article.publish_date, article.url)
 
-def run(settings, queue, phrases_db):
+def run(settings, queue, news_db, twitter_db):
   try:
     while True:
       item = queue.get()
-      item.download()
-      item.parse()
 
-      analyze(phrases_db, item)
+      if (type(item) is newspaper.article.Article):
+        analyze_article(news_db, item)
+      else: # TODO check for twitter object type
+        pass
 
   finally:
-    None
+    pass
