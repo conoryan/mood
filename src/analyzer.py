@@ -5,32 +5,23 @@ def parse_settings(settings):
 
 def analyze_sentence(db, sentence, datetime, url):
   for phrase in sentence.noun_phrases:
-    if (not db.insert_phrase(datetime, phrase, sentence.polarity, url)):
-      return False
-
-  return True
+    db.insert_phrase(datetime, phrase, sentence.polarity, url)
 
 def analyze(db, article):
   from textblob import TextBlob # this is a hack
   blob = TextBlob(article.text)
 
   for sentence in blob.sentences:
-    if (not analyze_sentence(db, sentence, article.publish_date, article.url)):
-      return False
-  return True
+    analyze_sentence(db, sentence, article.publish_date, article.url)
 
 def run(settings, queue, phrases_db):
-  running = True
-
   try:
-    while running:
+    while True:
       item = queue.get()
       item.download()
       item.parse()
 
-      if (not analyze(phrases_db, item)):
-        print('Unable to analyze article; exiting')
-        running = False
+      analyze(phrases_db, item)
 
   finally:
     None

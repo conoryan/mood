@@ -1,22 +1,14 @@
-import sys
-import newspaper
+import abc
 from time import sleep
 
-def parse_settings(settings):
-  wait_time = settings['WaitTime']
-  sources = [item.strip() for item in settings['Sources'].split(',')]
+# implementing classes must implement process() and define _wait_time
+class Scraper(abc.ABC):
+  @abc.abstractmethod
+  def process(self):
+    pass
 
-  return wait_time, sources
+  def run(self):
+    while True:
+      self.process()
 
-def run(settings, queue):
-  wait_time, source_urls = parse_settings(settings)
-
-  while True:
-    for url in source_urls:
-      source = newspaper.build(url, memoize_articles=False)
-      if (source.size() > 0):
-        print('Scraper found ' + str(source.size()) + ' new articles for ' +source.url)
-        for article in source.articles:
-          queue.put(article)
-
-    sleep(int(wait_time) / 1000.0)
+      sleep(int(self._wait_time) / 1000.0)

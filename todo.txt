@@ -5,7 +5,8 @@ catch newspaper.article.ArticleException
 - analyzer
 use worker pool to chew queue
 process data based on class type of data taken off queue - ie tweet vs site
-extract date and url from article and put in db
+on tweets: process @ better -> link to a person if someone @'s them?
+            proess # better -> break into works and include in sentiment?
 
 - general
 logging
