@@ -1,17 +1,22 @@
 - scraper 
-create class to store new data - inherit from it for tweet vs news site etc
-catch newspaper.article.ArticleException
+push "Article `download()` failed with 404 Client Error: Not Found for url: http://directory.nydailynews.com/news/politics/ny-news-house-democrats-investigation-trump-conspiracy-20180824-story.html on URL http://directory.nydailynews.com/news/politics/ny-news-house-democrats-investigation-trump-conspiracy-20180824-story.html
+Skipping http://directory.nydailynews.com/news/politics/ny-news-house-democrats-investigation-trump-conspiracy-20180824-story.html due to Article exception"
+  BACK onto queue... seems to work usually? or just reprocess then and there?
+one time memoization doesn't work for some sources? may need to track articles
+  and filter manually
+wsj never gets date.
 
 - analyzer
 use worker pool to chew queue
-process data based on class type of data taken off queue - ie tweet vs site
 on tweets: process @ better -> link to a person if someone @'s them?
-            proess # better -> break into works and include in sentiment?
+          easier: just break it up and incorp into noun_phrases
 
 - general
 logging
-make real math model
 
 - dependencies:
+sqlite3
 TextBlob
 newspaper3k
+vaderSentiment
+wordninja

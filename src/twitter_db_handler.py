@@ -25,11 +25,13 @@ class TwitterDBHandler(DBHandler):
     self._conn.commit()
 
   # finds CONTAINING phrase, not strict match
-  def get_scores_for_phrase(self, phrase):
+  # date start and end are both inclusive
+  # return entries as (sentiment, likes, retweets)
+  def get_data_for_phrase(self, phrase, start_date, end_date):
     c = self._get_cursor()
     print('%'+phrase+'%')
-    c.execute("SELECT ({get}) FROM '{tn}' WHERE {filter} LIKE ?".format(
-        get='sentiment', tn=self._table_name, filter='phrase'), 
-        ('%'+phrase+'%', ))
-    scores = c.fetchall()
-    print(scores)
+    c.execute("SELECT sentiment, likes, retweets FROM '{tn}' WHERE phrase "
+              "LIKE ? AND datetime BETWEEN ? AND ?".format(tn=self._table_name), 
+              ('%'+phrase+'%', str(start_date), str(end_date)))
+
+    return c.fetchall()

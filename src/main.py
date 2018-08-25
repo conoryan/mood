@@ -8,6 +8,8 @@ from twitter_scraper import TwitterScraper
 import analyzer
 from news_db_handler import NewsDBHandler
 from twitter_db_handler import TwitterDBHandler
+from mood_generator import MoodGenerator
+from datetime import datetime
 
 def get_settings():
   config = configparser.ConfigParser()
