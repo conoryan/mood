@@ -1,5 +1,5 @@
 # mood
-Generate a historical record of sentiment on a given query, based on news articles and tweets. For example, a user can query "trump" with two dates, and the output is an index score (range [-1,1]) representing the general sentiment of all news articles + tweets that make reference to "trump" between the two dates. Sentiment analysis is not the purpose of the project; the purpose is to aggregate and display (into a cohesive index) what sentiment is over all these different sources. Potential use: compare changes in this library's output with significant events to see the impact of those events public opinion.
+Generate a historical record of sentiment on a given query, based on news articles and tweets. For example, a user can query "trump" with two dates, and the output is an index score (range [-1,1]) representing the general sentiment of all news articles + tweets that make reference to "trump" between the two dates. Sentiment analysis is not the purpose of the project; the purpose is to aggregate and display (into a cohesive index) what sentiment is over all these different sources. Potential use: compare changes in this library's output with significant events to see the impact of those events on public opinion.
 
 ## next
 immediately:
