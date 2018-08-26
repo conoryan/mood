@@ -1,10 +1,10 @@
-- scraper 
-push "Article `download()` failed with 404 Client Error: Not Found for url: http://directory.nydailynews.com/news/politics/ny-news-house-democrats-investigation-trump-conspiracy-20180824-story.html on URL http://directory.nydailynews.com/news/politics/ny-news-house-democrats-investigation-trump-conspiracy-20180824-story.html
-Skipping http://directory.nydailynews.com/news/politics/ny-news-house-democrats-investigation-trump-conspiracy-20180824-story.html due to Article exception"
-  BACK onto queue... seems to work usually? or just reprocess then and there?
+- scraper
 one time memoization doesn't work for some sources? may need to track articles
   and filter manually
-wsj never gets date.
+clear .newspaper_scraper/memoized/ (memoized data) on FullRefreshStart
+scrape correct language?
+  huffpo is never in english?
+  and alsoforbes.ru etc.
 
 - analyzer
 use worker pool to chew queue
@@ -13,10 +13,13 @@ on tweets: process @ better -> link to a person if someone @'s them?
 
 - general
 logging
+better news library? like https://newsapi.org/docs/client-libraries/python
+  might work better with wsj/sources we can't seem to get date for
 
 - dependencies:
 sqlite3
 TextBlob
 newspaper3k
+  with this change: https://github.com/codelucas/newspaper/pull/402
 vaderSentiment
 wordninja

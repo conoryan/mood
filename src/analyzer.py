@@ -20,7 +20,7 @@ def _consume_article(news_db, article):
       news_db.insert_phrase(article.publish_date, phrase, sentence.polarity, 
                             article.url, article.url_root)
 
-def _retry_url(news_db, url):
+def _retry_url(news_db, url, url_root):
   article = newspaper.Article(url.strip())
   article.download()
   try:
@@ -30,9 +30,11 @@ def _retry_url(news_db, url):
     return
 
   print('Retry was successful')
+  article.url_root = url_root
   _consume_article(news_db, article)
 
 def analyze_article(news_db, article):
+  article.url = article.url.strip()
   if (news_db.article_is_in_db(article.url)):
     print("Skipping %s; already processed accoridng to db" %(article.url,))
     return
@@ -42,7 +44,7 @@ def analyze_article(news_db, article):
     article.parse()
   except newspaper.article.ArticleException:
     print('Trying %s again due to Article exception' %(article.url))
-    _retry_url(news_db, article.url)
+    _retry_url(news_db, article.url, article.url_root)
     return
 
   _consume_article(news_db, article)

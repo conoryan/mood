@@ -8,9 +8,11 @@ class MoodGenerator:
 
     self._news_source_urls = news_source_urls
     self._total_news_viewership = sum(news_source_urls.values())
+    print(self._total_news_viewership)
 
   def _get_news_score(self, phrase, start_date, end_date):
     scores = self._news_db.get_data_for_phrase(phrase, start_date, end_date)
+    print(scores)
     if (len(scores) == 0):
       return 0
 
@@ -21,6 +23,7 @@ class MoodGenerator:
       url_count[url_root] = url_count[url_root] + 1
     src_score = {url : url_sum[url] / float(url_count[url]) 
                   for url, count in url_count.items() if count > 0}
+    print(src_score)   
 
     news_score = 0
     for url, score in src_score.items():

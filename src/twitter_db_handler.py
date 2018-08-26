@@ -29,7 +29,6 @@ class TwitterDBHandler(DBHandler):
   # return entries as (sentiment, likes, retweets)
   def get_data_for_phrase(self, phrase, start_date, end_date):
     c = self._get_cursor()
-    print('%'+phrase+'%')
     c.execute("SELECT sentiment, likes, retweets FROM '{tn}' WHERE phrase "
               "LIKE ? AND datetime BETWEEN ? AND ?".format(tn=self._table_name), 
               ('%'+phrase+'%', str(start_date), str(end_date)))

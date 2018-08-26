@@ -43,6 +43,11 @@ if __name__ == "__main__":
   twitter_proc.start()
   analyzer_proc.start()
 
+  mood = MoodGenerator(news_db, twitter_db, news._source_urls)
+  print(mood.get_score('space', 
+                       datetime.strptime("2017-08-21 00:00:00", "%Y-%m-%d %H:%M:%S"), 
+                       datetime.strptime("2018-08-21 23:59:59", "%Y-%m-%d %H:%M:%S")))
+
   try:
     news_proc.join()
     twitter_proc.join()
